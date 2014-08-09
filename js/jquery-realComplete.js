@@ -221,7 +221,8 @@
 		this.$datalist = $('<ul class="rc-datalist">')
 										.insertAfter(this.$input)
 										.on('mouseenter', '.rc-option', function(e){ _this.highlightOption($(this)); _this.isOverOption = true })
-										.on('mouseleave', '.rc-option', function(e){ _this.isOverOption = false })
+										.on('mouseenter', function(e){ _this.isOverOption = true })
+										.on('mouseleave', function(e){ _this.isOverOption = false })
 										.on('click'     , '.rc-option', function(e){ _this.selectOption($(this)) })
 										;
 		this.closeDatalist();
@@ -323,10 +324,12 @@
 					'focusout':function(e){
 										if (_this.options.verbose) console.groupCollapsed('RealComplete > attachHandlers > $input > focusout');
 										// if isOverOption, the focus is lost but the dropdown list have to stay open to get the click on the option or the tab validation;
-										if (!_this.isOverOption) {
-											_this.closeDatalist();
-										} else{
+										if (_this.isOverOption) {
 											e.stopImmediatePropagation();
+											e.preventDefault();
+											_this.$input.focus();
+										} else{
+											_this.closeDatalist();
 										}
 										// if no selected option, then copy $input 'raw' value into the $clone.
 										if (_this.options.verbose) console.groupEnd();

@@ -12,3 +12,10 @@
 .rc-option.on{ background:Highlight; color:HighlightText}
 .rc-option.on > .rc-option-key { color:HighlightText}
 .realComplete.rc-has-data{padding-right: 1.5em; -webkit-appearance: menulist; -moz-appearance: menulist; -ms-appearance: menulist; appearance: menulist; }
+
+/* Hack for IE */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	.rc-option-key{margin-left:1.5em} /*IE10+*/
+}
+.rc-option-key{margin-left:1.5em\9;} /* IE9-*/
+.realComplete::-ms-clear {display: none} /* prevent IE 'x' from displaying in the input field */
