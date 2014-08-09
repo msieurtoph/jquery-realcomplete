@@ -3,6 +3,8 @@
 
 _realcomplete_ is an REAL powerfull autocompletion plugin for HTML form inputs.
 
+Check the demo page : [http://jquery-realcomplete.farmercorp.com/](http://jquery-realcomplete.farmercorp.com/)
+
 ## Why another plugin ? 
 
 I needed an autocompletion plugin that deals with **diacritics**. I found some case insensitive ones, but none of them was abble to give me "libération" if I only wrote "liberation". This was my first and main motivation.
@@ -69,7 +71,7 @@ options (object) :
   pageStep (integer) : step for page-up, page-down keys
   caseSensitive (boolean) : Search is case sensitive (true) or not (false). case sensitivity includes diacritics and ponctuations. 
   hiddenIfEmpty (boolean) : Do not open the dropdownlist (true), if there is no data (this.rawData is empty).
-  displayKey (boolean) : Display the key (true) or not (false) in the datalist dropdown.
+  displayKey (boolean) : For each suggestion, display the key (true) or not (false).
 }
 
 ```
