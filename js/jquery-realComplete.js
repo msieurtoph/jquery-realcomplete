@@ -61,6 +61,7 @@
  *   pageStep (integer)        : step for page-up, page-down keys
  *   caseSensitive (boolean)   : Search is case sensitive (true) or not (false). case sensitivity includes diacritics and ponctuations.
  *   hiddenIfEmpty (boolean)   : Don't open the dropdownlist (true), if there is no data (this.rawData is empty).
+ *   displayKey (boolean)   	 : Display the key (true) or not (false) in the datalist dropdown.
  * }
  * 
  * Current Properties returned by .realComplete() (object) :
@@ -84,7 +85,8 @@
  *
  * Triggered events :
  *   `ready.realcomplete` : triggered at the end of the dropdown list creation (when calling $.realComplete() for the first time).
- *   `loaded.realcomplete` : triggered each time an ajaxLoad is executed.
+ *   `loaded.realcomplete` : triggered each time an ajaxLoad is done.
+ *   `failed.realcomplete` : triggered each time an ajaxLoad fails.
  *   `updated.realcomplete` : triggered each time the module is updated, after update.
  *   `modified.realcomplete` : triggered each time the input string is modified (keyup, paste).
  *   `change` : triggered each time a option is selected (by clicking on it, or pressing the tab key or enter key)
@@ -136,6 +138,7 @@
 																		,pageStep : 10
 																		,caseSensitive : false
 																		,hiddenIfEmpty : true
+																		,displayKey : true
 																		,ajaxLoad : { url:false
 																									,data:{}
 																						}
@@ -165,7 +168,7 @@
 
 		/* setup some default values */
 		this.previousInputString = this.$input[0].value;	// previous inputString to compare when key is pressed on $input, or paste (default : the actual value of the $input)
-		this.rawData = {};								// raw initial data {<cleanLabel>:{label:<label>, value:<value>, ... }
+		this.rawData = {};								// raw initial data {<cleanValue>:{key:<key>, value:<value>, ... }
 		this.$highlightedOption = false;	// $option currently highlighted 
 		this.selectedOption = false;			// option selected in the datalist (by mouseclick or <arrows>+Return/Tab)
 		this.isOpen = true;								// is the dropdown list open ? default = true (it will be closed during the creation)
@@ -176,7 +179,7 @@
 		this.matchingDataCount = 0;				// Count of options that match the inputString
 		this.pageStep = 10; 							// Number of lines in a "page" of options. Used when press PgUp or PgDown.
 		
-		/* Clone input (to post values instead of labels to the form) */
+		/* Clone input (to post keys instead of values to the form) */
 		this.$inputClone = $('<input type="hidden" name="'+this.$input[0].name+'">');
 		this.$input[0].dataset.name = this.$input[0].name;
 		this.$input[0].name = '';
@@ -228,8 +231,9 @@
 	RealComplete.prototype.openDatalist = function(){
 		if (this.$datalist[0].children.length && !this.isOpen && !(this.options.hiddenIfEmpty && 0 === this.dataCount)) {
 			if (this.options.verbose) console.debug('RealComplete > openDatalist');
-			this.isOpen = true; 
-			this.$datalist.show(); 
+			this.isOpen = true;
+			this.$datalist.show();
+			this.highlightOption(this.$datalist.find('.rc-option:visible').first());
 			this.updateDisplay(true); 
 		}
 	}
@@ -248,8 +252,8 @@
 		for(var i in this.rawData){
 			option = this.rawData[i];
 			options += '<li class="rc-option" data-clean-value="'+i+'">'
-									+(option.value !== option.label ? '<span class="rc-option-value">'+option.value+'</span>':'')
-									+'<span class="rc-option-label">'+option.label+'</span>'
+									+(option.value !== option.key && this.options.displayKey ? '<span class="rc-option-key">'+option.key+'</span>':'')
+									+'<span class="rc-option-value">'+option.value+'</span>'
 									+'</li>';
 		}
 		this.$datalist[0].innerHTML = options;
@@ -291,7 +295,13 @@
 														}
 				})
 				.on({
-					'click':function(e){	if (!_this.isOpen && 0 !== _this.dataCount) _this.openDatalist()},
+					'click':function(e){	
+										if (!_this.isOpen && 0 !== _this.dataCount) {
+											_this.openDatalist()
+										} else {
+											_this.closeDatalist()
+										}
+									},
 					'keydown':function(e){
 											if (_this.options.verbose) console.debug('RealComplete > attachHandlers > $input > keypress >',e.which);
 											_this.processPressedKeyEvent(e);
@@ -350,7 +360,6 @@
 		this.filterKeyUp = true;
 		if (40 === e.which && !this.isOpen) {
 			this.openDatalist();	
-			this.highlightOption(this.$datalist.find('.rc-option:visible').first());
 		} else {
 			var $visibleOptions = this.$datalist.find('.rc-option:visible')
 					,$highlightedOption = $visibleOptions.filter('.on').first();
@@ -440,8 +449,8 @@
 			/* if option si selected */
 			if (this.selectedOption){
 				if (this.options.verbose) console.debug('RealComplete > applyFilter > option selected =', this.selectedOption);
-				this.$input[0].value = this.rawData[this.selectedOption].label;
-				this.$inputClone[0].value = this.rawData[this.selectedOption].value;
+				this.$input[0].value = this.rawData[this.selectedOption].value;
+				this.$inputClone[0].value = this.rawData[this.selectedOption].key;
 				this.$input.focus();
 			}
 			/* then filter regarding the input value */
@@ -554,20 +563,20 @@
 		} else {
 			this.$datalist.prepend(this.messages.$loading || '');
 		
-			var option, label, value, cleanLabel;
+			var option, key, value, cleanValue;
 			this.rawData = {};
 			this.dataCount = 0;
 			for(var d in data){
 				option = data[d];
 				if ('string' === typeof option) {
-					label = value = option;
+					key = value = option;
 				} else {
-					label = option.label;
+					key = option.key;
 					value = option.value;
 				}
-				cleanLabel = this.getCleanString(label);
-				if (!this.rawData[cleanLabel]) this.dataCount++;
-				this.rawData[cleanLabel] = {label:label, value:value};
+				cleanValue = this.getCleanString(value);
+				if (!this.rawData[cleanValue]) this.dataCount++;
+				this.rawData[cleanValue] = {key:key, value:value};
 			}			
 			this.updateDatalist();
 			if (this.selectedOption) {
@@ -614,22 +623,23 @@
 			this.runningTasks.push(
 				$.getJSON( options.url, options.data || {})
 				.done(function(buffer){
-					if (this.options.verbose) {		
+					if (_this.options.verbose) {		
 						console.groupCollapsed('RealComplete > processAjaxLoad > ended OK');
 						console.debug('RealComplete > processAjaxLoad > Returned buffer',buffer);
 					}
 					_this.processData(buffer);
-					if (this.options.verbose) console.groupEnd();
+					_this.fire('loaded.realcomplete');
+					if (_this.options.verbose) console.groupEnd();
 				})
 				.fail(function(){
-					if (this.options.verbose) {		
+					if (_this.options.verbose) {		
 						console.groupCollapsed('RealComplete > processAjaxLoad > ended KO');
 						console.error('RealComplete > processAjaxLoad > Returned buffer', arguments);
-						console.groupEnd();
 					}
+					_this.fire('failed.realcomplete');
+					if (_this.options.verbose)	console.groupEnd();
 				})
 			);
-			this.fire('loaded.realcomplete');
 		} else {
 			if (this.options.verbose) console.error('RealComplete > processAjaxLoad > wrong url', options.url);
 		}

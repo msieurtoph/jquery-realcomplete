@@ -6,11 +6,11 @@
 	max-height:200px; min-width:100px;
 }
 .rc-option,.rc-loading,.rc-noResult{padding:0 0.5em;margin:0;white-space:nowrap}
-.rc-option-value{float:right;padding:0.1em 0 0 0.5em;font-size:0.8em;color:#999}
+.rc-option-key{float:right;padding:0.1em 0 0 0.5em;font-size:0.8em;color:#999}
 .rc-option:after{content:'';display:block;clear:both} 
 .rc-option:before{float :right;width:1.5em;content:'';display:inline-block} /*prevent "Scrollbar Graphic Disaster"*/
 .rc-option.on{ background:Highlight; color:HighlightText}
-.rc-option.on > .rc-option-value { color:HighlightText}
+.rc-option.on > .rc-option-key { color:HighlightText}
 
 
 .realComplete.rc-has-data{padding-right: 1.5em; -webkit-appearance: menulist; -moz-appearance: menulist; -ms-appearance: menulist; appearance: menulist; }
