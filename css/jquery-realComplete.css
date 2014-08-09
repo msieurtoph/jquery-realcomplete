@@ -11,6 +11,4 @@
 .rc-option:before{float :right;width:1.5em;content:'';display:inline-block} /*prevent "Scrollbar Graphic Disaster"*/
 .rc-option.on{ background:Highlight; color:HighlightText}
 .rc-option.on > .rc-option-key { color:HighlightText}
-
-
 .realComplete.rc-has-data{padding-right: 1.5em; -webkit-appearance: menulist; -moz-appearance: menulist; -ms-appearance: menulist; appearance: menulist; }

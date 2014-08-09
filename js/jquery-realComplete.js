@@ -375,7 +375,8 @@
 					break;
 				case 38 :	// Up
 				case 40 : // Down
-					e.preventDefault(); 
+					e.preventDefault();
+					e.stopImmediatePropagation();
 					if (this.isOpen){
 						if (0 === $highlightedOption.length) {
 							this.highlightOption($visibleOptions[40 === e.which ? 'first':'last']());
@@ -392,6 +393,8 @@
 				case 33 :	// Pg Up
 				case 34 : // Pg Down
 					if (this.isOpen){
+						e.preventDefault();
+						e.stopImmediatePropagation();
 						if (0 === $highlightedOption.length) {
 							this.highlightOption($visibleOptions[34 === e.which ? 'first':'last']());
 						} else {
