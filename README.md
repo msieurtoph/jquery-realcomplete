@@ -125,23 +125,23 @@ properties (object) :
 
 ## Additional notes 
 
-1. RealComplete requires jQuery (and it has to be loaded before running).
-2. Input must to be something like `<input type="text" name="<name>">` for RealComplete to be used on it. I do not garantee any result on other kind of inputs
-2bis. RealComplete turns the `name` attribute to `data-name` attribute, because it creates another input with the original `name`, to save the key of the selected value (which can differ). 
-3. For better graphic experience, make sure the `margin-bottom` and `margin-left` styles of your input are null (= 0). 
-4. Dimensions, colorations and all styles come exclusively in the CSS file. You can modify it (at your own risk).  
-5. Events triggered inside (or triggerable from outside) are relative to the initial <input> :
+- RealComplete requires jQuery (and it has to be loaded before running).
+- Input must to be something like `<input type="text" name="<name>">` for RealComplete to be used on it. I do not garantee any result on other kind of inputs
+- RealComplete turns the `name` attribute to `data-name` attribute, because it creates another input with the original `name`, to save the key of the selected value (which can differ). 
+- For better graphic experience, make sure the `margin-bottom` and `margin-left` styles of your input are null (= 0). 
+- Dimensions, colorations and all styles come exclusively in the CSS file. You can modify it (at your own risk).  
+- Events triggered inside (or triggerable from outside) are relative to the initial <input> :
 ```
 $('#myInput').RealComplete(<option>); // not chainable, it returns current properties.
 $('#myInput').bind('ready.realcomplete', myFunc); // to listen to ready.realcomplete event
  
 $('#myInput').triggered('close.realcomplete'); // to trig the close.realcomplete event
 ```
-6. The instance of RealComplete class is attached to the initial input as `$(<input>).data('realComplete', <realCompleteInstance>)` and is accessible this way.
-7. When updating the `options.ajaxLoad`, make sure to provide a full object containing both data and url, not only one of them. 
+- The instance of RealComplete class is attached to the initial input as `$(<input>).data('realComplete', <realCompleteInstance>)` and is accessible this way.
+- When updating the `options.ajaxLoad`, make sure to provide a full object containing both data and url, not only one of them. 
      It may cause weird things with a complexe usage of this functionality.
-8. The diffrent messages are added and detached from the Dom. 
-   They are not removed, so you can modify them even if not visible, using : $(<input>).realComplete({messages:{noResult:'new message'}});
+- The diffrent messages are added and detached from the Dom. 
+   They are not removed, so you can modify them even if not visible, using : `$(<input>).realComplete({messages:{noResult:'new message'}});`
 
 
 
