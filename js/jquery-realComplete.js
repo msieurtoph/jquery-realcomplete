@@ -420,6 +420,8 @@
 	RealComplete.prototype.destroy = function(){
 		if (this.options.verbose) console.groupCollapsed('RealComplete > destroy');
 		this.$input[0].name = this.$inputClone[0].name;
+		this.$input.off('**'); // delete all event on the input (may include some external delegate events)
+													// if needed, make sure to re-bind them after destroy or re-instanciate realComplete.
 		this.$inputClone.remove();
 		this.$datalist.remove();
 		this.$input.removeData('realComplete');
