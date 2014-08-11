@@ -531,6 +531,7 @@
 	RealComplete.prototype.selectOption = function($option){
 		this.selectedOption = $option ? $option[0].dataset.cleanValue : false;
 		if (this.options.verbose) console.groupCollapsed('RealComplete > selectOption >', this.selectedOption);
+		this.isOverOption = false;
 		this.applyFilter();
 		this.closeDatalist();
 		
