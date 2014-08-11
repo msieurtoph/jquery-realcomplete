@@ -44,7 +44,7 @@
   </fieldset>	
 	<fieldset>
 		<legend>No visible key usage:</legend>
-		<p><pre>$('#nokey').realComplete({data:[...]}, displayKey:false);</pre></p>
+		<p><pre>$('#nokey').realComplete({data:[{key:"01", value:"Ain"},{key:"02", value:"Aisne"},...]}, displayKey:false);</pre></p>
 		French departments : <input type="text" name="myInput" id="nokey" />
 		<button>Button</button>
 		<script>
@@ -58,7 +58,7 @@
 	<fieldset>
 		<legend>Very large datalist usage (over 4000 options):</legend>
 		<p><pre>$('#large').realComplete({data:[...]});</pre></p>
-		French airports : <input type="text" name="myInput" id="large" />
+		French train stations : <input type="text" name="myInput" id="large" />
 		<button>Button</button>
 		<script>
 			$(function(){
