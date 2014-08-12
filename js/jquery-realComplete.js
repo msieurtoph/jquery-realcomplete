@@ -181,7 +181,10 @@
 		
 		/* Clone input (to post keys instead of values to the form) */
 		this.$inputClone = $('<input type="hidden" name="'+this.$input[0].name+'">');
-		this.$input[0].dataset.name = this.$input[0].name;
+		/* COMPATIBILITE IE8- */
+		//this.$input[0].dataset.name = this.$input[0].name;
+		this.$input[0].setAttribute('data-name', this.$input[0].name);
+		/**********************/
 		this.$input[0].name = '';
 		this.$inputClone.insertBefore(this.$input);
 		
@@ -314,7 +317,10 @@
 												// if no selectedOption and inputString is exactly matching an option, then select it and stop bubbling the change effect
 												var $match = (_this.$datalist.find('[data-clean-value="'+_this.getCleanString(_this.$input[0].value)+'"]'));
 												if (1 === $match.length){
-													if (_this.options.verbose) console.debug('RealComplete > attachHandlers > $input > change > auto select',$match[0].dataset.cleanValue);
+													/* COMPATIBILITE IE8- */
+													//if (_this.options.verbose) console.debug('RealComplete > attachHandlers > $input > change > auto select',$match[0].dataset.cleanValue);
+													if (_this.options.verbose) console.debug('RealComplete > attachHandlers > $input > change > auto select',$match[0].getAttribute('data-clean-value'));
+													/***********************/
 													_this.selectOption($match);
 													e.stopImmediatePropagation();
 													e.preventDefault();
@@ -484,7 +490,10 @@
 					var options = this.$datalist[0].children;
 					if (this.options.caseSensitive){
 						for (var i=0; i < options.length;i++){
-							if (options[i].dataset.cleanValue) {
+							/* COMPATIBILITE IE8- */
+							//if (options[i].dataset.cleanValue) {
+							if (options[i].getAttribute('data-clean-value')) {
+							/**********************/
 								if (options[i].innerHTML.indexOf(inputString) > -1) { //case sensitive search
 									options[i].style.display = 'block';
 									this.matchingDataCount++;
@@ -495,8 +504,12 @@
 						}
 					} else {
 						for (var i=0; i < options.length;i++){
-							if (options[i].dataset.cleanValue) {
-								if (options[i].dataset.cleanValue.indexOf(inputCleanString) > -1) { // case insensitive search on "data-clean-value" attribute
+							/* COMPATIBILITE IE8- */
+							//if (options[i].dataset.cleanValue) {
+							//	if (options[i].dataset.cleanValue.indexOf(inputCleanString) > -1) { // case insensitive search on "data-clean-value" attribute
+							if (options[i].getAttribute('data-clean-value')) {
+								if (options[i].getAttribute('data-clean-value').indexOf(inputCleanString) > -1) { // case insensitive search on "data-clean-value" attribute
+							/**********************/
 									options[i].style.display = 'block';
 									this.matchingDataCount++;
 								} else {
@@ -529,7 +542,10 @@
 	}
 
 	RealComplete.prototype.selectOption = function($option){
-		this.selectedOption = $option ? $option[0].dataset.cleanValue : false;
+		/* COMPATIBILITE IE8- */
+		//this.selectedOption = $option ? $option[0].dataset.cleanValue : false;
+		this.selectedOption = $option ? $option[0].getAttribute('data-clean-value') : false;
+		/**********************/
 		if (this.options.verbose) console.groupCollapsed('RealComplete > selectOption >', this.selectedOption);
 		this.isOverOption = false;
 		this.applyFilter();
