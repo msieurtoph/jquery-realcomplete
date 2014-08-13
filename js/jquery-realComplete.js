@@ -591,7 +591,7 @@
 			var option, key, value, cleanValue;
 			this.rawData = {};
 			this.dataCount = 0;
-			for(var d in data){
+			for(var d=0, len=data.length; d<len; ++d){
 				option = data[d];
 				if ('string' === typeof option) {
 					key = value = option;
@@ -682,7 +682,7 @@
 	},
 
 	RealComplete.prototype.getCleanString = function (str) {
-		for(var i=0; i<this.diacriticsRemovalMap.length; i++) {
+		for(var i=0,len=this.diacriticsRemovalMap.length; i<len; ++i) {
 			str = (str||'').replace(this.diacriticsRemovalMap[i].letters, this.diacriticsRemovalMap[i].base).toLowerCase();
 		}
 		return str;
