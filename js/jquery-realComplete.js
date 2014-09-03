@@ -377,8 +377,16 @@
 					this.closeDatalist();	
 					break;
 				case 13 : // Enter
-				case 9 : // Tab = valid the current highlightedOption
-					if (0 !== $highlightedOption.length) this.selectOption($highlightedOption);
+				case 9 : // Tab = valid the current highlightedOption (if different from previous one)
+					console.log('TOTO', $highlightedOption[0].dataset.cleanValue, ' - ', this.selectedOption, ' - ', this.isOpen);
+					if (0 !== $highlightedOption.length) {
+						/* COMPATIBILITE IE8- */
+						//if ($highlightedOption[0].dataset.cleanValue !== this.$highlightedOption.dataset.cleanValue) {
+						if ($highlightedOption[0].getAttribute('data-clean-value') !== this.selectedOption) {
+						/***********************/
+							this.selectOption($highlightedOption);
+						}
+					}
 					if (!this.selectedOption) this.$inputClone[0].value = this.$input[0].value; 
 					this.updateDisplay();
 					break;
