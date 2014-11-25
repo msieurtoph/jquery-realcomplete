@@ -71,6 +71,7 @@ options (object) :
   pageStep (integer) : step for page-up, page-down keys
   caseSensitive (boolean) : Search is case sensitive (true) or not (false). case sensitivity includes diacritics and ponctuations. 
   hiddenIfEmpty (boolean) : Do not open the dropdownlist (true), if there is no data (this.rawData is empty).
+  strictMode (boolean) : Do not copy plugin input string into the hidden cloned input if no entry have been selected in the list
   displayKey (boolean) : For each suggestion, display the key (true) or not (false).
 }
 
